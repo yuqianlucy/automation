@@ -5,6 +5,8 @@
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
 
+
+# AUTHENTICATION
 # using the Subscription ID
 SUBSCRIPTION_ID="017234a8-6f7b-4711-b658-24802bfcb30b"
 
@@ -45,9 +47,36 @@ async_vm_start=compute_client.virtual_machines("MyResourceGroup","TestVM")
 async_vm_start.wait()
 print('\nFinished start.')
 
+
 # defining the main function
 def main():
-    pass
+    # Code for taking care of the automation
+    # Creating two global variable
+    # One for the speech key
+    subscription_key=os.environ['SPEECH_KEY']
+    # Another one is for the region
+    region=os.environ['SPEECH_REGION']
+    # we also need one varibale to store the url
+    url="https://{}.tts.speech.microsoft.com/cognitiveservies/v1".format(region)
+    # another variable called header, which is an dictionary
+    headers={
+        "Ocp-Apim-Subscription-Key":subscription_key,
+        "Content-Type":"application/ssml+xml",
+        "X-Microsoft-OutputFormat":"audio-48khz-192kbitrate-mono-mp2"
+    }
+
+    # we need to open the file we need to convert into speech
+    with open("./sample/path/my_pitch.ssml") as file:
+        ssml=file.readlines()
+    ssml=" ".join(ssml)
+    ssml=ssml.encode('utf-8')
+    # getting the response
+    response=requests.post(url=url,data=ssml,headers=headers)
+
+    # open the mp3 file we just generated
+    with open("output.mp3","wb") as f:
+        f.write(response.content)
 
 if __name__=="__main__":
+    
     main()
