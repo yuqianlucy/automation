@@ -2,6 +2,8 @@
 #!pip install azure.identity
 # Importing the require library
 #pip install azure-identity
+import os
+import requests
 from azure.common.credentials import ServicePrincipalCredentials
 #from azure.mgmt.automation.automation_management_client import AutomationManagementClient
 #from azure.mgmt.automation.automation_management_client import AutomationManagementClient
@@ -69,9 +71,7 @@ password = credential.properties['password']
 azure_credential=DefaultAzureCredential(excluded_iteractive_browser_credential=False)
 
 
-# Importing the require library
-import os
-import requests
+
 # checking the environment variables
 #os.getenv() Python function that is used to retrieve the value of an environment variable
 # endpoint=os.getenv('IDENTITY_ENDPOINT')+"?resource=https://management.azure.com/"
